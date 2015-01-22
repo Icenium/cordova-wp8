@@ -84,6 +84,16 @@ module.exports.run = function (argv) {
     shell.sed("-i", /\$guid1\$/g, guid, wmAppManifest);
     shell.sed("-i", /\$safeprojectname\$/g, appName, wmAppManifest);
 
+    // replace values in the Package.appxmanifest
+    var appxmanifest = path.join(projectPath, "Package.appxmanifest"),
+     guid2 = uuid.v4(),
+     appId = "x" + guid.replace(/-/g, "y") + "x";
+
+    shell.sed("-i", /\$safeprojectname\$/g, appName, appxmanifest);
+    shell.sed("-i", /\$identityGuid\$/g, guid2, appxmanifest);
+    shell.sed("-i", /\$guid1\$/g, guid, appxmanifest);
+    shell.sed("-i", /\$appId\$/g, appId, appxmanifest);
+
     //replace projectname in project files
     ["App.xaml", "App.xaml.cs", "MainPage.xaml", "MainPage.xaml.cs", defaultAppName + ".csproj"].forEach(function (file) {
         shell.sed("-i", /\$safeprojectname\$/g, packageName, path.join(projectPath, file));
