@@ -172,11 +172,10 @@ namespace WPCordovaClassLib.CordovaLib
         {
             get
             {
-                // TODO:
                 var res = from results in AllowedPlugins.TakeWhile(p => p.Value.isAutoLoad)
                           select results.Value.Name;
 
-                return new string[] { "", "" };
+				return res.ToArray();
             }
         }
 
