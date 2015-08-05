@@ -299,6 +299,12 @@ namespace WPCordovaClassLib
                     }
                 }
 
+                string[] autoloadPlugs = this.configHandler.AutoloadPlugins;
+                foreach (string plugName in autoloadPlugs)
+                {
+                    nativeExecution.AutoLoadCommand(plugName);
+                }
+
                 CordovaBrowser.Navigate(StartPageUri);
                 IsBrowserInitialized = true;
                 AttachHardwareButtonHandlers();
@@ -332,6 +338,10 @@ namespace WPCordovaClassLib
 
         void page_BackKeyPress(object sender, CancelEventArgs e)
         {
+            if (e.Cancel)
+            {
+                return;
+            }
 
             if (OverrideBackButton)
             {
@@ -377,11 +387,6 @@ namespace WPCordovaClassLib
             }
 
             Debug.WriteLine("CordovaBrowser_LoadCompleted");
-            string[] autoloadPlugs = this.configHandler.AutoloadPlugins;
-            foreach (string plugName in autoloadPlugs)
-            {
-                nativeExecution.AutoLoadCommand(plugName);
-            }
 
             // send js code to fire ready event
             string nativeReady = "(function(){ cordova.require('cordova/channel').onNativeReady.fire()})();";
